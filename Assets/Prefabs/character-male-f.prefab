@@ -266,7 +266,6 @@ GameObject:
   - component: {fileID: 2248002521461635653}
   - component: {fileID: 5734180469110323445}
   - component: {fileID: 8711937968822697255}
-  - component: {fileID: 417051248821162545}
   m_Layer: 0
   m_Name: character-male-f
   m_TagString: Untagged
@@ -341,22 +340,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.59, y: 0.67, z: 0.42}
   m_Center: {x: 0, y: 0.39, z: 0}
---- !u!114 &417051248821162545
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3029962533123210723}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b69f318bab3a2348b191ab0f4164642, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 100
-  attackDamage: 10
-  attackRange: 2
-  attackSpeed: 1.5
 --- !u!1 &3353280393600037515
 GameObject:
   m_ObjectHideFlags: 0
