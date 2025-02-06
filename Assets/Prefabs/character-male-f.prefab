@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 8711937968822697255}
   m_Layer: 0
   m_Name: character-male-f
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -364,7 +364,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -534,6 +534,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8848168302693694241}
+  - component: {fileID: 418948803092876742}
   m_Layer: 0
   m_Name: blasterE
   m_TagString: Untagged
@@ -549,14 +550,35 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5360165188460424937}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: 1.2215066, y: 0.32, z: -1.918}
+  m_LocalRotation: {x: 0, y: -0.8152289, z: 0, w: 0.579139}
+  m_LocalPosition: {x: 1.452, y: 0.304, z: -2.035}
   m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4748932927783180024}
   m_Father: {fileID: 4365600857456074785}
-  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -109.22, z: 0}
+--- !u!65 &418948803092876742
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5360165188460424937}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.1209477, y: 0.37074286, z: 1.4472986}
+  m_Center: {x: 0, y: 0.02511243, z: -0}
 --- !u!1 &5677303071362380041
 GameObject:
   m_ObjectHideFlags: 0
