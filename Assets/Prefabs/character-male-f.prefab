@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5658594999333638617}
   - component: {fileID: 3752030551850891239}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: body-mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6892173000408444367}
   - component: {fileID: 4045482291702178976}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: head-mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,7 +199,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6599074969431696116}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: leg-left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,7 +230,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 276113239244914131}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: AttachPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,7 +261,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7512743672408139715}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: torso
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -297,7 +297,7 @@ GameObject:
   - component: {fileID: 2248002521461635653}
   - component: {fileID: 5734180469110323445}
   - component: {fileID: 8711937968822697255}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: character-male-f
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -364,7 +364,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -379,7 +379,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9184395998729929621}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -415,7 +415,7 @@ GameObject:
   - component: {fileID: 4748932927783180024}
   - component: {fileID: 7317776048431819905}
   - component: {fileID: 428941383277357690}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: blasterE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -503,7 +503,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5376385891767101650}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -535,7 +535,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8848168302693694241}
   - component: {fileID: 418948803092876742}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: blasterE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -588,7 +588,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3418968656527145650}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: arm-left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -619,7 +619,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5252719296879390938}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: arm-right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -651,7 +651,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4365600857456074785}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -684,7 +684,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4969055516670019970}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: leg-right
   m_TagString: Untagged
   m_Icon: {fileID: 0}

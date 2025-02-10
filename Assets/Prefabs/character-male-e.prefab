@@ -46,7 +46,6 @@ GameObject:
   - component: {fileID: 8205920174683270282}
   - component: {fileID: 4081972819999368406}
   - component: {fileID: 5770222023883719761}
-  - component: {fileID: 5240877203955258587}
   m_Layer: 0
   m_Name: character-male-e
   m_TagString: Untagged
@@ -114,7 +113,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -142,22 +141,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5240877203955258587
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 670433688274220190}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c7ad85dde6bbd547988a04d0a2899de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detectRange: 3
-  attackRange: 2
-  moveSpeed: 3
-  health: 100
 --- !u!1 &1853873322461629158
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,7 +490,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3458310248836225327}
   m_Layer: 0
-  m_Name: AttachPoint
+  m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
