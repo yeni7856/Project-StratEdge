@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace MyStartEdge
 {
-    public class CharacterAIController : MonoBehaviour
+    public class CharacterAIController : MonoBehaviour, IDamageable
     {
         #region Variables
         private Animator animator;
@@ -94,6 +94,11 @@ namespace MyStartEdge
             animator.SetBool("IsWalking", newState == CharacterState.Walking);
             animator.SetBool("IsAttacking", newState == CharacterState.Attacking);
             animator.SetBool("IsIdle", newState == CharacterState.Idle);
+        }
+
+        public void TakeDamage(float damage)
+        {
+            
         }
     }
  }
