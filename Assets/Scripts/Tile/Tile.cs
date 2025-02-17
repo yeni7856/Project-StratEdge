@@ -10,7 +10,7 @@ namespace MyStartEdge
         private GameObject turret;
 
         //현재 선택된 캐릭터 blueprint(prefab, cost, ....)
-        //public TurretBlueprint blueprint;
+        public CharacterBlueprint blueprint;
 
         //빌드매니저 객체
         //private BuildManager buildManager;
@@ -146,7 +146,7 @@ namespace MyStartEdge
             }*/
         }
 
-        public void SellTurret()
+/*        public void SellTurret()
         {
             //판매가격 저장
             int sellMoney = blueprint.GetSellCost();
@@ -165,10 +165,10 @@ namespace MyStartEdge
 
             //판매가격 벌기
             PlayerStats.AddMoney(sellMoney);
-        }
+        }*/
 
         //터렛 설치 위치
-        public Vector3 GetBuildPosition()
+/*        public Vector3 GetBuildPosition()
         {
             return this.transform.position + blueprint.offset;
         }
@@ -178,6 +178,6 @@ namespace MyStartEdge
             rend.enabled = false;
             //rend.material.color = startColor;
             rend.material = startMaterial;
-        }
+        }*/
     }
 }

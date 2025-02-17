@@ -3,14 +3,14 @@ using UnityEngine.UI;
 
 namespace MyStartEdge
 {
-    public class Health : MonoBehaviour
+    public class Health : MonoBehaviour,IDamageable
     {
         #region Variables
         [SerializeField] private int maxHealth = 100;       //최대 체력
-        private int currentHealth;                                  //현재 체력
+        private float currentHealth;                                  //현재 체력
         public bool IsDead => currentHealth <= 0;       //죽음처리
 
-        private CharacterStateMachine characterStateMachine;
+        private CharacterMachine characterMachine;
         private Animator animator;
         public Image healthFill;
         #endregion
@@ -19,21 +19,8 @@ namespace MyStartEdge
         {
             currentHealth = maxHealth;      //초기화
             animator = GetComponent<Animator>();
-            characterStateMachine = GetComponent<CharacterStateMachine>();
+            characterMachine = GetComponent<CharacterMachine>();
             UpdateHealthBar();
-        }
-
-        public void TakeDamage(int amount)
-        {
-            if (IsDead) return;
-
-            currentHealth -= amount;
-            UpdateHealthBar();
-
-            if (currentHealth <= 0)
-            {
-                Die();
-            }
         }
         private void UpdateHealthBar()
         {
@@ -55,8 +42,21 @@ namespace MyStartEdge
             animator.SetBool("AllEnemiesDefeated", false);
 
             animator.SetInteger("Health",0);
-            characterStateMachine.ChangeState(CharacterState.Die);
+            characterMachine.ChangeState(CharacterState.Dead);
             Destroy(gameObject, 2f);
+        }
+
+        public void TakeDamage(float damage)
+        {
+            if (IsDead) return;
+
+            currentHealth -= damage;
+            UpdateHealthBar();
+
+            if (currentHealth <= 0)
+            {
+                Die();
+            }
         }
     }
 }
