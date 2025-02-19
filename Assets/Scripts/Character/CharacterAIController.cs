@@ -7,114 +7,171 @@ namespace MyStartEdge
     {
         #region Variables
         private Animator animator;
-        private Transform target;                                      // 현재 타겟 (플레이어나 적)
-        private CharacterMachine characterMachine;      //초기상태
+        private Transform detectedTarget;  //감지 된 적의 위치 저장
+        private CharacterMachine characterMachine;      //캐릭터 상태
         private Health health;
 
         [Header("AI Settings")]
         [SerializeField] private float detectRange = 10f;    // 적 감지 범위
         [SerializeField] private float attackRange = 2f;     // 근접 공격 범위
         [SerializeField] private float moveSpeed = 3f;     // 이동 속도
-        public LayerMask enemyLayer;        //적Layer
+/*        public LayerMask enemyLayer;        //적Layer
+        public LayerMask tileLayer;            //타일 레이어 추가*/
 
         [Header("Shooting Settings")]
         public Transform firePoint;              //총알 포지션
         public GameObject bulletPrefab;     //총알 프리팹
 
-        private bool allEnemiesDefeated = false; // 적이 전부 죽었는지 확인
+        private bool isWin = false;            // 적이 전부 죽었는지 확인
         #endregion
 
         private void Start()
         {
             characterMachine = GetComponent<CharacterMachine>();
             animator = GetComponent<Animator>();
-            health = GetComponent<Health>(); // ✅ Health 컴포넌트 가져오기
+            health = GetComponent<Health>(); 
         }
         private void Update()
         {
             LookForEnemy();
+            if (isWin)
+            {
+                Debug.Log("승리!");
+                //승리시 골드추가
+                //다음 스테이지 준비
+            }
         }
 
         // 적 감지 및 타겟 설정
         public void LookForEnemy()
         {
-            Collider[] enemies = Physics.OverlapSphere(transform.position, detectRange, enemyLayer);
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            Debug.Log("감지된 적의 수: " + enemies.Length);
             if (enemies.Length > 0)
             {
-                target = enemies[0].transform;
-                characterMachine.ChangeState(CharacterState.Walking);
+                //가까운 적 찾기 
+                GameObject closestEnemy = FindClosestEnemy(enemies);
+                detectedTarget = closestEnemy.transform;
+                Debug.Log("감지된 적 위치: " + detectedTarget.position);
+
+                MoveOrShoot(); // 이동 또는 사격 결정
             }
             else
             {
-                target = null;
+                detectedTarget = null;
                 CheckAllEnemiesDefeated();
             }
         }
 
-        // 이동 로직
-        public void MoveTowardsTarget()
+        private GameObject FindClosestEnemy(GameObject[] enemies)
         {
-            if (target == null) return;
-
-            float distance = Vector3.Distance(transform.position, target.position);
-            if (distance <= attackRange)
+            GameObject closestEnemy = null;
+            float closestDistance = Mathf.Infinity;
+            foreach (GameObject enemy in enemies)
             {
-                characterMachine.ChangeState(CharacterState.Attacking);
+                if (enemy == null)
+                {
+                    Debug.LogWarning("적 오브젝트가 null입니다.");
+                    continue; // null인 경우 건너뛰기
+                }
+                float distance = Vector3.Distance(transform.position, enemy.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestEnemy = enemy;
+                }
+            }
+            return closestEnemy;
+        }
+
+        private void MoveOrShoot()
+        {
+            Debug.Log("MoveOrShoot 호출");
+            if (detectedTarget == null)
+            {
+                Debug.LogWarning("detectedTarget is null in MoveOrShoot.");
                 return;
             }
-            else if (distance <= detectRange)
-            {
-                characterMachine.ChangeState(CharacterState.Shooting);
-            }
 
-            transform.position = Vector3.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
-            transform.LookAt(target);
+            float distance = Vector3.Distance(transform.position, detectedTarget.position);
+
+            // 디버깅: 적과의 거리 출력
+            Debug.Log("적과의 거리: " + distance);
+            Debug.Log("감지 범위: " + detectRange);
+
+            if (distance <= detectRange)
+            {
+                Debug.Log("사격 범위 내");
+                characterMachine.ChangeState(CharacterState.Shooting); // 사격 범위 내에 있으면 사격
+            }
+            else
+            {
+                Debug.Log("사격 범위 밖");
+                characterMachine.ChangeState(CharacterState.Walking); // 사격 범위 밖에 있으면 이동
+            }
         }
 
-        // 슈팅 로직
+        // 이동
+        public void MoveTowardsTarget()
+        {
+            Debug.Log("MoveTowardsTarget 호출");
+            if (detectedTarget == null) return;
+
+            float distance = Vector3.Distance(transform.position, detectedTarget.position);
+            Debug.Log("적과의 거리: " + distance);
+            if (distance <= attackRange)    //근접시 Attack
+            {
+                characterMachine.ChangeState(CharacterState.Attacking); 
+            }
+            if (distance <= detectRange)
+            {
+                characterMachine.ChangeState(CharacterState.Shooting); // 사격 범위 내에 있으면 사격
+                return;
+            }
+
+            //적쪽으로 포지션
+            transform.position = Vector3.MoveTowards(transform.position, detectedTarget.position, moveSpeed * Time.deltaTime);
+            transform.LookAt(detectedTarget);    //타겟쪽으로
+        }
+
+        // 슈팅
         public void ShootTarget()
         {
-            if (target == null) return;
+            if (detectedTarget == null) return;
 
-            Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
             characterMachine.ChangeState(CharacterState.Shooting);
+            GameObject bulletGo= Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            Destroy(bulletGo, 2f);
         }
 
-        // 공격 로직
-        public void AttackTarget()
-        {
-            if (target == null) return;
-            animator.SetTrigger("IsAttacking");
-        }
-
-        // 적이 전부 죽었는지 체크
+        // 적이 있는지 확인
         public void CheckAllEnemiesDefeated()
         {
-            Collider[] enemies = Physics.OverlapSphere(transform.position, detectRange, enemyLayer);
-            if (enemies.Length == 0)
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            if (enemies.Length > 0)
             {
-                allEnemiesDefeated = true;
-                PlayVictoryAnimation();
+                return; // 적이 있으면 종료
             }
+            isWin = true;       //타일 위에 적 없으면 승리 처리
+            PlayWinAnimation();
         }
-
+        
         // 승리 애니메이션 실행
-        public void PlayVictoryAnimation()
+        public void PlayWinAnimation()
         {
-            animator.SetBool("AllEnemiesDefeated", true);
+            animator.SetTrigger("Win");
         }
 
         // 애니메이션 상태 업데이트
         public void UpdateAnimation(CharacterState newState)
         {
-            animator.SetBool("IsShooting", newState == CharacterState.Shooting);
-            animator.SetBool("IsWalking", newState == CharacterState.Walking);
-            animator.SetBool("IsAttacking", newState == CharacterState.Attacking);
             animator.SetBool("IsIdle", newState == CharacterState.Idle);
-            animator.SetBool("AllEnemiesDefeated", allEnemiesDefeated);
+            animator.SetBool("IsWalking", newState == CharacterState.Walking);
+            animator.SetBool("IsShooting", newState == CharacterState.Shooting);
+            animator.SetBool("IsAttacking", newState == CharacterState.Attacking);
         }
 
-        // 디버깅용 기즈모 (적 감지 범위)
+        //적 감지 범위
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;

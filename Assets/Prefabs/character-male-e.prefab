@@ -46,6 +46,9 @@ GameObject:
   - component: {fileID: 8205920174683270282}
   - component: {fileID: 4081972819999368406}
   - component: {fileID: 5770222023883719761}
+  - component: {fileID: 6994656332755435282}
+  - component: {fileID: 6169146345632009566}
+  - component: {fileID: 5322490428137235173}
   m_Layer: 0
   m_Name: character-male-e
   m_TagString: Untagged
@@ -141,6 +144,49 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6994656332755435282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 670433688274220190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 174a18565fcefcb4b8b7c6d5ff915619, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6169146345632009566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 670433688274220190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c7ad85dde6bbd547988a04d0a2899de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectRange: 2
+  attackRange: 0.6
+  moveSpeed: 3
+  firePoint: {fileID: 3458310248836225327}
+  bulletPrefab: {fileID: 1724267356983873915, guid: e237a0fcb9382634e8173d451f4c15f0, type: 3}
+--- !u!114 &5322490428137235173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 670433688274220190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9793cdd3e2531641984bb781ad5ab2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  healthFill: {fileID: 0}
 --- !u!1 &1853873322461629158
 GameObject:
   m_ObjectHideFlags: 0

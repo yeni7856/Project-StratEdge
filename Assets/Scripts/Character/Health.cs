@@ -11,44 +11,33 @@ namespace MyStartEdge
         public bool IsDead => currentHealth <= 0;       //죽음처리
 
         private CharacterMachine characterMachine;
-        private Animator animator;
         public Image healthFill;
         #endregion
 
         void Start ()
         {
             currentHealth = maxHealth;      //초기화
-            animator = GetComponent<Animator>();
             characterMachine = GetComponent<CharacterMachine>();
             UpdateHealthBar();
         }
+
+        //HealthBar 업데이트
         private void UpdateHealthBar()
         {
             if (healthFill != null)
             {
-                SetHealth(currentHealth, maxHealth);
+                healthFill.fillAmount = currentHealth / maxHealth;
             }
-        }
-        public void SetHealth(float currentHealth, float maxHealth)
-        {
-            healthFill.fillAmount = currentHealth / maxHealth;
         }
         private void Die()
         {
-            animator.SetBool("IsIdle", false);
-            animator.SetBool("IsWalking", false);
-            animator.SetBool("IsShooting", false);
-            animator.SetBool("IsAttacking", false);
-            animator.SetBool("AllEnemiesDefeated", false);
-
-            animator.SetInteger("Health",0);
             characterMachine.ChangeState(CharacterState.Dead);
             Destroy(gameObject, 2f);
         }
 
         public void TakeDamage(float damage)
         {
-            if (IsDead) return;
+            if (IsDead || damage <=0 ) return;     //죽었거나 데미지가 0이하면 무시
 
             currentHealth -= damage;
             UpdateHealthBar();

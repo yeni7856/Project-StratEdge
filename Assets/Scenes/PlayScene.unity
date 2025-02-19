@@ -1805,11 +1805,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 290036964}
   m_Mesh: {fileID: -7513297493162946847, guid: 80bf9a250c78ff347bf8244298527f53, type: 3}
---- !u!4 &299878998 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3458310248836225327, guid: b2620a15cc5404a47bebaf8c6fd1b112, type: 3}
-  m_PrefabInstance: {fileID: 164905552353329584}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &314820795
 GameObject:
   m_ObjectHideFlags: 0
@@ -9769,11 +9764,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1403300891}
   m_CullTransparentMesh: 1
---- !u!1 &1403463771 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 670433688274220190, guid: b2620a15cc5404a47bebaf8c6fd1b112, type: 3}
-  m_PrefabInstance: {fileID: 164905552353329584}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1406573734
 GameObject:
   m_ObjectHideFlags: 0
@@ -14182,6 +14172,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: character-male-e
       objectReference: {fileID: 0}
+    - target: {fileID: 5322490428137235173, guid: b2620a15cc5404a47bebaf8c6fd1b112, type: 3}
+      propertyPath: healthFill
+      value: 
+      objectReference: {fileID: 1304083452}
+    - target: {fileID: 5770222023883719761, guid: b2620a15cc5404a47bebaf8c6fd1b112, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7451919519088646926, guid: b2620a15cc5404a47bebaf8c6fd1b112, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2
@@ -14225,13 +14223,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 670433688274220190, guid: b2620a15cc5404a47bebaf8c6fd1b112, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8614103005109286335}
-    - targetCorrespondingSourceObject: {fileID: 670433688274220190, guid: b2620a15cc5404a47bebaf8c6fd1b112, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8614103005109286334}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b2620a15cc5404a47bebaf8c6fd1b112, type: 3}
 --- !u!33 &446666095028718263
 MeshFilter:
@@ -16965,7 +16957,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2248002521461635653, guid: 11a3d3c4745eedd4badca2cd4930bcfb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.211
+      value: 0.03
       objectReference: {fileID: 0}
     - target: {fileID: 2248002521461635653, guid: 11a3d3c4745eedd4badca2cd4930bcfb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -16999,6 +16991,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: character-male-f
       objectReference: {fileID: 0}
+    - target: {fileID: 4737525574696477331, guid: 11a3d3c4745eedd4badca2cd4930bcfb, type: 3}
+      propertyPath: healthFill
+      value: 
+      objectReference: {fileID: 1304083452}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17122,41 +17118,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7451919519088646926, guid: b2620a15cc5404a47bebaf8c6fd1b112, type: 3}
   m_PrefabInstance: {fileID: 164905552353329584}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8614103005109286334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1403463771}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c7ad85dde6bbd547988a04d0a2899de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detectRange: 10
-  attackRange: 2
-  moveSpeed: 3
-  health: 100
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  firePoint: {fileID: 299878998}
-  bulletPrefab: {fileID: 1724267356983873915, guid: e237a0fcb9382634e8173d451f4c15f0, type: 3}
---- !u!114 &8614103005109286335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1403463771}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9793cdd3e2531641984bb781ad5ab2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  healthFill: {fileID: 1304083452}
 --- !u!23 &8967936299497500931
 MeshRenderer:
   m_ObjectHideFlags: 0
