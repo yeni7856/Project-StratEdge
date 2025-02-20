@@ -34,6 +34,7 @@ namespace MyStartEdge
         private void Update()
         {
             LookForEnemy();
+
             if (isWin)
             {
                 Debug.Log("승리!");
@@ -49,9 +50,9 @@ namespace MyStartEdge
             Debug.Log("감지된 적의 수: " + enemies.Length);
             if (enemies.Length > 0)
             {
-                //가까운 적 찾기 
+                //가까운 적 찾기
                 GameObject closestEnemy = FindClosestEnemy(enemies);
-                detectedTarget = closestEnemy.transform;
+                detectedTarget = closestEnemy.transform;    //적위치저장
                 Debug.Log("감지된 적 위치: " + detectedTarget.position);
 
                 MoveOrShoot(); // 이동 또는 사격 결정
@@ -63,10 +64,11 @@ namespace MyStartEdge
             }
         }
 
+        //적 감지
         private GameObject FindClosestEnemy(GameObject[] enemies)
         {
             GameObject closestEnemy = null;
-            float closestDistance = Mathf.Infinity;
+            float closestDistance = Mathf.Infinity;  //최소거리
             foreach (GameObject enemy in enemies)
             {
                 if (enemy == null)
@@ -84,64 +86,50 @@ namespace MyStartEdge
             return closestEnemy;
         }
 
-        private void MoveOrShoot()
+        public void MoveOrShoot()
         {
             Debug.Log("MoveOrShoot 호출");
-            if (detectedTarget == null)
-            {
-                Debug.LogWarning("detectedTarget is null in MoveOrShoot.");
-                return;
-            }
+            if (detectedTarget == null) return;
 
             float distance = Vector3.Distance(transform.position, detectedTarget.position);
-
-            // 디버깅: 적과의 거리 출력
-            Debug.Log("적과의 거리: " + distance);
-            Debug.Log("감지 범위: " + detectRange);
-
             if (distance <= detectRange)
             {
                 Debug.Log("사격 범위 내");
-                characterMachine.ChangeState(CharacterState.Shooting); // 사격 범위 내에 있으면 사격
+                ShootTarget(); // 사격 범위 내에 있으면 사격
+                return;
+            }
+            else if (distance <= attackRange)    //근접시 Attack
+            {
+                Debug.Log("근접공격 범위 내");
+                characterMachine.ChangeState(CharacterState.Attacking);
+                return;
             }
             else
             {
                 Debug.Log("사격 범위 밖");
                 characterMachine.ChangeState(CharacterState.Walking); // 사격 범위 밖에 있으면 이동
             }
-        }
-
-        // 이동
-        public void MoveTowardsTarget()
-        {
-            Debug.Log("MoveTowardsTarget 호출");
-            if (detectedTarget == null) return;
-
-            float distance = Vector3.Distance(transform.position, detectedTarget.position);
-            Debug.Log("적과의 거리: " + distance);
-            if (distance <= attackRange)    //근접시 Attack
-            {
-                characterMachine.ChangeState(CharacterState.Attacking); 
-            }
-            if (distance <= detectRange)
-            {
-                characterMachine.ChangeState(CharacterState.Shooting); // 사격 범위 내에 있으면 사격
-                return;
-            }
-
             //적쪽으로 포지션
-            transform.position = Vector3.MoveTowards(transform.position, detectedTarget.position, moveSpeed * Time.deltaTime);
-            transform.LookAt(detectedTarget);    //타겟쪽으로
+            Vector3 direction = (detectedTarget.position - transform.position).normalized;
+/*            //y축 사용 안함
+            direction.y = 0;*/
+            // 앞으로 이동
+            transform.position += direction * moveSpeed * Time.deltaTime;
+            // 타겟 방향으로 회전 (Y축만 회전)
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * moveSpeed);
         }
 
         // 슈팅
         public void ShootTarget()
         {
             if (detectedTarget == null) return;
-
             characterMachine.ChangeState(CharacterState.Shooting);
-            GameObject bulletGo= Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-            Destroy(bulletGo, 2f);
+            if(bulletPrefab != null)
+            {
+                GameObject bulletGo= Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+                Destroy(bulletGo, 2f);
+            }
         }
 
         // 적이 있는지 확인
@@ -160,15 +148,6 @@ namespace MyStartEdge
         public void PlayWinAnimation()
         {
             animator.SetTrigger("Win");
-        }
-
-        // 애니메이션 상태 업데이트
-        public void UpdateAnimation(CharacterState newState)
-        {
-            animator.SetBool("IsIdle", newState == CharacterState.Idle);
-            animator.SetBool("IsWalking", newState == CharacterState.Walking);
-            animator.SetBool("IsShooting", newState == CharacterState.Shooting);
-            animator.SetBool("IsAttacking", newState == CharacterState.Attacking);
         }
 
         //적 감지 범위

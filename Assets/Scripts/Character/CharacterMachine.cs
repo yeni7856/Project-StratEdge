@@ -15,12 +15,10 @@ namespace MyStartEdge
     public class CharacterMachine : MonoBehaviour
     {
         private CharacterState currentState;
-        private CharacterAIController characterController;
         private Animator animator;
 
         private void Awake()
         {
-            characterController = GetComponent<CharacterAIController>();
             animator = GetComponent<Animator>();
         }
 
@@ -28,7 +26,7 @@ namespace MyStartEdge
         {
             if (currentState == newState) return;
             currentState = newState;
-            characterController.UpdateAnimation(newState);
+            UpdateAnimation(newState);
 
             switch (newState)
             {
@@ -99,6 +97,15 @@ namespace MyStartEdge
         private void SetWinAnimation()
         {
             animator.SetTrigger("Win");
+        }
+
+        // 애니메이션 상태 업데이트
+        public void UpdateAnimation(CharacterState newState)
+        {
+            animator.SetBool("IsIdle", newState == CharacterState.Idle);
+            animator.SetBool("IsWalking", newState == CharacterState.Walking);
+            animator.SetBool("IsShooting", newState == CharacterState.Shooting);
+            animator.SetBool("IsAttacking", newState == CharacterState.Attacking);
         }
     }
 }
