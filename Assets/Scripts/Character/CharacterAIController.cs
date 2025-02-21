@@ -29,7 +29,7 @@ namespace MyStartEdge
         {
             characterMachine = GetComponent<CharacterMachine>();
             animator = GetComponent<Animator>();
-            health = GetComponent<Health>(); 
+            health = GetComponent<Health>();
         }
         private void Update()
         {
@@ -111,13 +111,16 @@ namespace MyStartEdge
             }
             //적쪽으로 포지션
             Vector3 direction = (detectedTarget.position - transform.position).normalized;
-/*            //y축 사용 안함
-            direction.y = 0;*/
+            //y축 사용 안함
+            direction.y = 0;
             // 앞으로 이동
             transform.position += direction * moveSpeed * Time.deltaTime;
             // 타겟 방향으로 회전 (Y축만 회전)
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * moveSpeed);
+            if(direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * moveSpeed);
+            }
         }
 
         // 슈팅

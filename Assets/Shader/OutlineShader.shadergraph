@@ -1769,8 +1769,8 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -2951.999755859375,
-            "y": -380.9999694824219,
+            "x": -2997.0,
+            "y": -383.0,
             "width": 208.0,
             "height": 361.0
         }
@@ -2794,7 +2794,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "AlphaClipThreshold",
     "m_StageCapability": 2,
-    "m_Value": 0.5,
+    "m_Value": 1.0,
     "m_DefaultValue": 0.5,
     "m_Labels": []
 }
@@ -3310,8 +3310,8 @@
     "m_ObjectId": "8da204bfe1544974bf18aa27d0d4a047",
     "m_Title": "Color",
     "m_Position": {
-        "x": -2708.0,
-        "y": 627.9998779296875
+        "x": -2707.999755859375,
+        "y": 627.9999389648438
     }
 }
 
@@ -4001,8 +4001,8 @@
     "m_ObjectId": "b51d8101c5464dd4a2bbf130cce79b58",
     "m_Title": "Rotation",
     "m_Position": {
-        "x": -3497.0,
-        "y": -439.9999694824219
+        "x": -3496.999755859375,
+        "y": -441.99993896484377
     }
 }
 
@@ -5209,8 +5209,8 @@
     "m_ObjectId": "e89e6748faba4c4abf418ceabca88237",
     "m_Title": "Outline",
     "m_Position": {
-        "x": -1778.0,
-        "y": -39.999996185302737
+        "x": -1777.9998779296875,
+        "y": -39.999969482421878
     }
 }
 

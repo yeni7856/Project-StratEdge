@@ -716,7 +716,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  healthFill: {fileID: 0}
+  healthFill: {fileID: 5074265613657717732}
 --- !u!1 &3202542541806870762
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,7 +728,7 @@ GameObject:
   - component: {fileID: 4186590547227375910}
   - component: {fileID: 2992347667532035997}
   m_Layer: 0
-  m_Name: CharacterUI
+  m_Name: StatsUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -742,14 +742,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3202542541806870762}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2040365435869800710}
   m_Father: {fileID: 2248002521461635653}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2992347667532035997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -762,7 +762,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c4548b5e08938b45838899d98333d3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xRotationOffset: 0
 --- !u!1 &3353280393600037515
 GameObject:
   m_ObjectHideFlags: 0

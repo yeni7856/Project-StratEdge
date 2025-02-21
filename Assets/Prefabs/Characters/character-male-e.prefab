@@ -175,7 +175,7 @@ MonoBehaviour:
   attackRange: 0.6
   moveSpeed: 0.6
   firePoint: {fileID: 3458310248836225327}
-  bulletPrefab: {fileID: 1724267356983873915, guid: e237a0fcb9382634e8173d451f4c15f0, type: 3}
+  bulletPrefab: {fileID: 0}
 --- !u!114 &5322490428137235173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -753,7 +753,7 @@ GameObject:
   - component: {fileID: 4100256567556738064}
   - component: {fileID: 3132319706449920683}
   m_Layer: 0
-  m_Name: CharacterUI
+  m_Name: StatsUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -787,7 +787,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c4548b5e08938b45838899d98333d3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xRotationOffset: 0
 --- !u!1 &3566652677339569254
 GameObject:
   m_ObjectHideFlags: 0
