@@ -31,7 +31,7 @@ namespace MyStartEdge
             animator = GetComponent<Animator>();
             health = GetComponent<Health>();
         }
-        private void Update()
+        private void FixedUpdate()
         {
             LookForEnemy();
 

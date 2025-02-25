@@ -10,7 +10,7 @@ namespace MyStartEdge
     {
         #region Variables
         public CharacterDatabase characterDB;            //캐릭터 데이터베이스
-        public Transform uiContainer;                      //UI 부모 슬롯
+        public Transform uiSlot;                      //UI 부모 슬롯
         public GameObject characterSlotPrefab;          // UI 슬롯 프리팹
 
         private List<CharacterData> selectedCharacters = new List<CharacterData>();
@@ -18,7 +18,6 @@ namespace MyStartEdge
 
         private void Start()
         {
-
             RandomCharacterSlots();
         }
 
@@ -38,7 +37,7 @@ namespace MyStartEdge
         //기존 UI 정리 함수
         private void ClearUI()
         {
-            foreach (Transform child in uiContainer)
+            foreach (Transform child in uiSlot)
             {
                 Destroy(child.gameObject);
             }
@@ -61,12 +60,12 @@ namespace MyStartEdge
         //UI 슬롯 생성 함수
         private void CreateCharacterSlot(CharacterData character)
         {
-            GameObject slotObj = Instantiate(characterSlotPrefab, uiContainer);
+            GameObject slotObj = Instantiate(characterSlotPrefab, uiSlot);
             CharacterSlot slot = slotObj.GetComponent<CharacterSlot>();
 
             if (slot != null)
             {
-                slot.Setup(character, CharacterOnMap);
+                slot.Setup(character, () => CharacterOnMap(character));
             }
         }
 

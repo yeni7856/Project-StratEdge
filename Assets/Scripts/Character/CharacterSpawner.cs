@@ -1,3 +1,4 @@
+ï»¿using System.Linq;
 using UnityEngine;
 
 namespace MyStartEdge
@@ -5,24 +6,48 @@ namespace MyStartEdge
     public class CharacterSpawner : MonoBehaviour
     {
         public static CharacterSpawner Instance;
-        public Transform[] spawnPoints; // Ä³¸¯ÅÍ°¡ ¹èÄ¡µÉ À§Ä¡
+        public static Transform[] spawnPoints; // ìºë¦­í„°ê°€ ë°°ì¹˜ë  ìœ„ì¹˜
 
         private void Awake()
         {
-            Instance = this;
+            if(Instance == null)
+            {
+                Instance = this;
+            }
+
+            FindSpawnPoints();
         }
 
+        void FindSpawnPoints()
+        {
+            // "SpawnPoints" ë¶€ëª¨ í¬ì§€ì…˜
+            spawnPoints = new Transform[this.transform.childCount];
+            for (int i = 0; i < spawnPoints.Length; i++)
+            {
+                if(spawnPoints != null)
+                {
+                    spawnPoints[i] = this.transform.GetChild(i);
+                    Debug.Log($"ğŸ” Found {spawnPoints.Length} spawn points.");
+                }
+                else
+                {
+                    Debug.LogWarning(" 'SpawnPoints' ì˜¤ë¸Œì íŠ¸ë¥¼ ì”¬ì— ì¶”ê°€í•˜ì„¸ìš”!");
+                }
+            }
+        }
+
+        //ìºë¦­í„° ë§µìœ„ì¹˜ì— ìƒì„±í•˜ê¸°
         public void SpawnCharacter(CharacterData character)
         {
             if (spawnPoints.Length == 0)
             {
-                Debug.LogWarning("½ºÆù Æ÷ÀÎÆ®°¡ ¾ø½À´Ï´Ù!");
+                Debug.LogWarning("ìŠ¤í° í¬ì¸íŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤!");
                 return;
             }
-            // ·£´ıÀ¸·Î ½ºÆù À§Ä¡ ¼±ÅÃ
+            // ëœë¤ìœ¼ë¡œ ìŠ¤í° ìœ„ì¹˜ ì„ íƒ
             Transform randomSpawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
-            // Ä³¸¯ÅÍ ÀÎ½ºÅÏ½º »ı¼º
+            // ìºë¦­í„° ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
             Instantiate(character.characterPrefab, randomSpawnPoint.position, Quaternion.identity);
         }
     }

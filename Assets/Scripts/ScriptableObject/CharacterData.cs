@@ -6,6 +6,7 @@ namespace MyStartEdge
     public class CharacterData : ScriptableObject
     {
         [Header("Data Settings")]
+        public int id;                                  //캐릭터 고유 아이디
         public string characterName;            //캐릭터이름
         public Sprite characterImage;             //캐릭터Sprite
         public GameObject characterPrefab;  //캐릭터 프리팹

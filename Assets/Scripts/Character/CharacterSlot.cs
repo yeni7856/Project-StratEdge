@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,14 +17,14 @@ namespace MyStartEdge
         #endregion
 
         // 캐릭터 정보 업데이트
-        public void Setup(CharacterData data, System.Action<CharacterData> onSelect)
+        public void Setup(CharacterData character, Action onSelect)
         {
-            characterData = data;
-            characterImage.sprite = data.characterImage; // 캐릭터 이미지 설정
-            characterName.text = data.characterName; // 캐릭터 이름 설정
+            characterData = character;
+            characterImage.sprite = character.characterImage; // 캐릭터 이미지 설정
+            characterName.text = character.characterName; // 캐릭터 이름 설정
 
             selectButton.onClick.RemoveAllListeners(); // 기존 이벤트 삭제
-            selectButton.onClick.AddListener(() => onSelect(characterData)); // 새로운 이벤트 등록
+            selectButton.onClick.AddListener(() => onSelect.Invoke()); // 새로운 이벤트 등록
         }
     }
 }

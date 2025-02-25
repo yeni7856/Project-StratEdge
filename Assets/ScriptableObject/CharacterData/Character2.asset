@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f387025cc557644b83880f37e8ad6e5, type: 3}
   m_Name: Character2
   m_EditorClassIdentifier: 
-  characterName: Character2
-  characterIcon: {fileID: 21300000, guid: bf2a398abd83a11489ef85a3d5cb5c6c, type: 3}
+  id: 6
+  characterName: Charcater2
+  characterImage: {fileID: 21300000, guid: bf2a398abd83a11489ef85a3d5cb5c6c, type: 3}
   characterPrefab: {fileID: 3029962533123210723, guid: 11a3d3c4745eedd4badca2cd4930bcfb, type: 3}
   maxHealth: 120
   attack: 8
   bulletSpeed: 1
+  price: 0
   detectRange: 0.8
   attackRange: 0.1
   moveSpeed: 0.8
