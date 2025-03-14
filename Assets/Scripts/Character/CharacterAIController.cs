@@ -15,14 +15,17 @@ namespace MyStartEdge
         [SerializeField] private float detectRange = 10f;    // 적 감지 범위
         [SerializeField] private float attackRange = 2f;     // 근접 공격 범위
         [SerializeField] private float moveSpeed = 3f;     // 이동 속도
-/*        public LayerMask enemyLayer;        //적Layer
-        public LayerMask tileLayer;            //타일 레이어 추가*/
 
         [Header("Shooting Settings")]
         public Transform firePoint;              //총알 포지션
         public GameObject bulletPrefab;     //총알 프리팹
 
         private bool isWin = false;            // 적이 전부 죽었는지 확인
+
+        private bool isDragging = false;     //드래그여부
+        private Transform startParent;
+
+        public CharacterData characterData;     //캐릭터 데이터
         #endregion
 
         private void Start()
@@ -30,6 +33,8 @@ namespace MyStartEdge
             characterMachine = GetComponent<CharacterMachine>();
             animator = GetComponent<Animator>();
             health = GetComponent<Health>();
+
+            //CharacterDatat가 있다면 Health에 maxHealth 설정
         }
         private void FixedUpdate()
         {
@@ -42,8 +47,57 @@ namespace MyStartEdge
                 //다음 스테이지 준비
             }
         }
+        private void OnMouseDown()
+        {
+            isDragging = true;
+            startParent = transform.parent; // 드래그 시작 전 부모 저장
+            transform.SetParent(null); // 부모에서 분리
+        }
 
-        // 적 감지 및 타겟 설정
+        private void OnMouseDrag()
+        {
+            if (isDragging) // Check if isDragging is true
+            {
+                Vector3 mousePos = GetMouseWorldPosition();
+                transform.position = new Vector3(mousePos.x, transform.position.y, mousePos.z);
+            }
+        }
+
+        //마우스 타일위에 
+        private void OnMouseUp()
+        {
+            isDragging = false;
+            //Raycast to find tile
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 100))
+            {
+                Tile tile = hit.collider.GetComponent<Tile>();
+                if (tile != null && tile.IsPlaceable())
+                {
+                    transform.SetParent(tile.transform); // 타일의 자식으로 설정
+                    transform.position = new Vector3(tile.transform.position.x, transform.position.y, tile.transform.position.z); // 타일 중심으로 이동
+                }
+                else
+                {
+                    transform.SetParent(startParent); // 원래 부모로 복귀
+                }
+            }
+            else
+            {
+                transform.SetParent(startParent); // 원래 부모로 복귀
+            }
+        }
+
+        //마우스 월드 좌표
+        private Vector3 GetMouseWorldPosition()
+        {
+            Vector3 mousePos = Input.mousePosition;
+            mousePos.z = Camera.main.transform.position.y;
+            return Camera.main.ScreenToWorldPoint(mousePos);
+        }
+
+        // 적 감지 및 공격 또는 이동
         public void LookForEnemy()
         {
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -123,7 +177,7 @@ namespace MyStartEdge
             }
         }
 
-        // 슈팅
+        //슛팅 총알 발사
         public void ShootTarget()
         {
             if (detectedTarget == null) return;
@@ -169,7 +223,7 @@ namespace MyStartEdge
 
             if (health.IsDead)
             {
-                characterMachine.ChangeState(CharacterState.Dead);
+                health.Die();
             }
         }
     }
