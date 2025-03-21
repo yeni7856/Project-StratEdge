@@ -19,6 +19,5 @@ namespace MyStartEdge
         [SerializeField] private float detectRange;    // 적 감지 범위
         [SerializeField] private float attackRange;     // 근접 공격 범위
         [SerializeField] private float moveSpeed;     // 이동 속도
-
     }
 }

@@ -52,6 +52,7 @@ namespace MyStartEdge
             isDragging = true;
             startParent = transform.parent; // 드래그 시작 전 부모 저장
             transform.SetParent(null); // 부모에서 분리
+            Debug.Log("캐릭터 터치됨");
         }
 
         private void OnMouseDrag()
@@ -67,7 +68,7 @@ namespace MyStartEdge
         private void OnMouseUp()
         {
             isDragging = false;
-            //Raycast to find tile
+            // 타일에 배치 시도
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 100))
@@ -89,7 +90,7 @@ namespace MyStartEdge
             }
         }
 
-        //마우스 월드 좌표
+        //마우스 월드 좌표 변환
         private Vector3 GetMouseWorldPosition()
         {
             Vector3 mousePos = Input.mousePosition;
@@ -140,9 +141,16 @@ namespace MyStartEdge
             return closestEnemy;
         }
 
+        //이동 또는 공격 결정(타일위에 있을때만 실행)
         public void MoveOrShoot()
         {
             Debug.Log("MoveOrShoot 호출");
+            //캐릭터가 타일 위에 없으면 움직이지 않음
+            if(transform.parent == null || transform.parent.GetComponent<Tile>() == null)
+            {
+                return;
+            }
+
             if (detectedTarget == null) return;
 
             float distance = Vector3.Distance(transform.position, detectedTarget.position);
@@ -163,6 +171,7 @@ namespace MyStartEdge
                 Debug.Log("사격 범위 밖");
                 characterMachine.ChangeState(CharacterState.Walking); // 사격 범위 밖에 있으면 이동
             }
+
             //적쪽으로 포지션
             Vector3 direction = (detectedTarget.position - transform.position).normalized;
             //y축 사용 안함
