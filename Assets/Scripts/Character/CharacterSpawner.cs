@@ -4,16 +4,20 @@ using UnityEngine;
 
 namespace MyStartEdge
 {
+    /// <summary>
+    /// 캐릭터 덱 
+    /// </summary>
     public class CharacterSpawner : MonoBehaviour
     {
+        //스포너 인스턴스
         public static CharacterSpawner Instance;
-        public static Transform[] spawnPoints; // 캐릭터가 배치될 위치
+        //public static Transform[] spawnPoints; // 캐릭터가 배치될 위치
 
-        /// <summary>
-        /// 객체 풀 CharcaterData id 에 해당 캐릭터 프리팹 리스트
-        /// </summary>
-        private Dictionary<int, List<GameObject>> characterPools = new Dictionary<int, List<GameObject>>();
-        private int poolSize = 5;
+        //캐릭터 덱(스폰) 포인트
+        [Header("스폰포인트 리스트")]
+        [SerializeField]private List<Transform> spawnPoints = new List<Transform>();
+
+        private string spawnPoint = "SpawnPoint";
 
         private void Awake()
         {
@@ -27,95 +31,82 @@ namespace MyStartEdge
                 return;
             }
 
+            //자동 스폰포인트 등록
+            if(spawnPoints.Count == 0)
+            {
                 FindSpawnPoints();
+            }
         }
 
         void FindSpawnPoints()
         {
-            // "SpawnPoints" 부모 포지션
-            spawnPoints = new Transform[this.transform.childCount];
-            for (int i = 0; i < spawnPoints.Length; i++)
+            spawnPoints.Clear();
+            foreach(Transform child in transform)
             {
-                if(spawnPoints != null)
-                {
-                    spawnPoints[i] = this.transform.GetChild(i);
-                    Debug.Log($"🔍 Found {spawnPoints.Length} spawn points.");
-                }
-                else
-                {
-                    Debug.LogWarning(" 'SpawnPoints' 오브젝트를 씬에 추가하세요!");
-                }
+                spawnPoints.Add(child);
+                child.tag = spawnPoint;
             }
+
+            Debug.Log($"{spawnPoints.Count} spawn points");
         }
 
-        //객체 풀에서 사용가능한 캐릭터 반환
-        private GameObject GetPooledCharacter(CharacterData character)
+        //사용 가능한 스폰포인트 랜덤 선택
+        private Transform GetAvailableSpawnPoint()
         {
-            int id = character.id;
-            if (!characterPools.ContainsKey(id))
-            {
-                //풀생성
-                characterPools[id] = new List<GameObject>();
-                for(int i = 0; i < poolSize; i++)
-                {
-                    GameObject obj = Instantiate(character.characterPrefab, Vector3.zero, Quaternion.identity);
-                    obj.SetActive(false);
-                    characterPools[id].Add(obj);
-                }
-            }
+            List<Transform> availablePoints = new List<Transform>();
 
-            //사용 가능한 객체 검색
-            foreach(GameObject obj in characterPools[id])
+            foreach(var sp in spawnPoints)
             {
-                if (!obj.activeInHierarchy)
-                {
-                    return obj;
-                }
+                if (sp.childCount == 0)
+                    availablePoints.Add(sp);
             }
-            //모두 사용중이면 추가 생성 안함
-            return null;
+            if(availablePoints.Count == 0)
+                return null;
+            return availablePoints[Random.Range(0, availablePoints.Count)];
         }
 
         //캐릭터 맵위치에 생성하기
         public void SpawnCharacter(CharacterData character)
         {
-            if (spawnPoints.Length == 0)
+            if (spawnPoints.Count == 0)
             {
                 Debug.LogWarning("스폰 포인트가 없습니다!");
                 return;
             }
             // 랜덤으로 스폰 위치 선택
-            Transform randomSpawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+            Transform spawnPoint = GetAvailableSpawnPoint();
 
             // 스폰포인트에 이미 자식(캐릭터)이 있으면 스폰하지 않음
-            if (randomSpawnPoint.childCount > 0)
+            if (spawnPoint == null)
             {
                 Debug.Log("스폰포인트에 캐릭터가 이미 존재합니다. 캐릭터 덱을 비워주세요.");
                 return;
             }
 
-            // 객체 풀에서 사용 가능한 캐릭터 가져오기
-            GameObject characterInstance = GetPooledCharacter(character);
+            //캐릭터 인스턴스 생성
+            GameObject characterInstance = Instantiate(character.characterPrefab, spawnPoint.position, Quaternion.identity);
+            characterInstance.transform.SetParent(spawnPoint);
             if (characterInstance == null)
             {
-                Debug.Log("풀에 사용 가능한 캐릭터가 없습니다!");
+                Debug.Log("캐릭터가 없습니다!");
                 return;
             }
-            // 캐릭터 인스턴스 생성
-            Instantiate(character.characterPrefab, randomSpawnPoint.position, Quaternion.identity);
+
+            //데이터 메니저 데이터 가져오기
+            CharacterData data = DataManager.Instance.GetCharacterData(character.id);
 
             // 생성된 캐릭터에 데이터 할당 및 상태 초기화 (Idle 상태)
             CharacterAIController aiController = characterInstance.GetComponent<CharacterAIController>();
             if (aiController != null)
             {
-                aiController.characterData = character;
+                aiController.characterData = data;
             }
-/*            Health health = characterInstance.GetComponent<Health>();
-            if (health != null)
-            {
-                health.characterData = character;
-                // Health.Start()에서 maxHealth를 반영하게 됨
-            }*/
+            //Health health = characterInstance.GetComponent<Health>();
+            //if (health != null)
+            //{
+            //    health. = character;
+            //    // Health.Start()에서 maxHealth를 반영하게 됨
+            //}
             CharacterMachine machine = characterInstance.GetComponent<CharacterMachine>();
             if (machine != null)
             {

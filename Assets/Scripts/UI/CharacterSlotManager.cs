@@ -9,7 +9,7 @@ namespace MyStartEdge
     public class CharacterSlotManager : MonoBehaviour
     {
         #region Variables
-        public CharacterDatabase characterDB;            //캐릭터 데이터베이스
+        //public CharacterDatabase characterDB;            //캐릭터 데이터베이스
         public Transform uiSlot;                      //UI 부모 슬롯
         public GameObject characterSlotPrefab;          // UI 슬롯 프리팹
 
@@ -47,7 +47,7 @@ namespace MyStartEdge
         //랜덤 캐릭터 선택 함수
         private void SelectRandomCharacters()
         {
-            List<CharacterData> pool = new List<CharacterData>(characterDB.characters);
+            List<CharacterData> pool = new List<CharacterData>(DataManager.Instance.allCharacterData);
 
             for (int i = 0; i < 4 && pool.Count > 0; i++)
             {
@@ -58,6 +58,7 @@ namespace MyStartEdge
         }
         
         //UI 슬롯 생성 함수
+        //슬롯 클릭시 해당 슬롯 제거 후 캐릭터 스폰
         private void CreateCharacterSlot(CharacterData character)
         {
             GameObject slotObj = Instantiate(characterSlotPrefab, uiSlot);
@@ -65,7 +66,11 @@ namespace MyStartEdge
 
             if (slot != null)
             {
-                slot.Setup(character, () => CharacterOnMap(character));
+                slot.Setup(character, () => {
+
+                    Destroy(slotObj);
+                    CharacterOnMap(character);
+                    });
             }
         }
 
