@@ -14,10 +14,11 @@ namespace MyStartEdge
         //public static Transform[] spawnPoints; // 캐릭터가 배치될 위치
 
         //캐릭터 덱(스폰) 포인트
-        [Header("스폰포인트 리스트")]
-        [SerializeField]private List<Transform> spawnPoints = new List<Transform>();
+        [Header("플레이어 덱 타일 리스트")]
+        [SerializeField] private Transform tileParent;
+        [SerializeField]private List<PlayerSpawnTile> playerTiles = new List<PlayerSpawnTile>();
 
-        private string spawnPoint = "SpawnPoint";
+        //private string spawnPoint = "SpawnPoint";
 
         private void Awake()
         {
@@ -31,13 +32,11 @@ namespace MyStartEdge
                 return;
             }
 
-            //자동 스폰포인트 등록
-            if(spawnPoints.Count == 0)
-            {
-                FindSpawnPoints();
-            }
+            //플레이어 덱 타일 자식 컴포넌트 자동수집
+            PlayerSpawnTile[] foundTiles = tileParent.GetComponentsInChildren<PlayerSpawnTile>();
+            playerTiles = new List<PlayerSpawnTile>(foundTiles);
         }
-
+/*
         void FindSpawnPoints()
         {
             spawnPoints.Clear();
@@ -64,54 +63,64 @@ namespace MyStartEdge
                 return null;
             return availablePoints[Random.Range(0, availablePoints.Count)];
         }
-
+*/
         //캐릭터 맵위치에 생성하기
         public void SpawnCharacter(CharacterData character)
         {
-            if (spawnPoints.Count == 0)
+            //사용가능한 타일
+            List<PlayerSpawnTile> availableTiles = new List<PlayerSpawnTile>();
+            foreach(PlayerSpawnTile tile in playerTiles)
             {
-                Debug.LogWarning("스폰 포인트가 없습니다!");
+                if (tile.IsPlaceable())
+                {
+                    availableTiles.Add(tile);
+                }
+            }
+
+            //랜덤 사용가능한 타일 없을때
+            if (availableTiles.Count == 0)
+            {
+                Debug.LogWarning("캐릭터 덱을 비워주세요!");
                 return;
             }
-            // 랜덤으로 스폰 위치 선택
-            Transform spawnPoint = GetAvailableSpawnPoint();
 
-            // 스폰포인트에 이미 자식(캐릭터)이 있으면 스폰하지 않음
-            if (spawnPoint == null)
+            // 랜덤으로 타일 위치 선택
+            int randomIndex = Random.Range(0, availableTiles.Count);
+            PlayerSpawnTile selectedTile = availableTiles[randomIndex];
+
+            CharacterAIController existingCharacter = selectedTile.GetComponentInChildren<CharacterAIController>();
+            // 플레이어 타일에 이미 자식(캐릭터)이 있으면 스폰하지 않음
+            if (existingCharacter != null)
             {
                 Debug.Log("스폰포인트에 캐릭터가 이미 존재합니다. 캐릭터 덱을 비워주세요.");
                 return;
             }
 
-            //캐릭터 인스턴스 생성
-            GameObject characterInstance = Instantiate(character.characterPrefab, spawnPoint.position, Quaternion.identity);
-            characterInstance.transform.SetParent(spawnPoint);
-            if (characterInstance == null)
+            //캐릭터 생성
+            GameObject newcharacter = Instantiate(character.characterPrefab, selectedTile.transform.position, Quaternion.identity);
+            if (newcharacter == null)
             {
                 Debug.Log("캐릭터가 없습니다!");
                 return;
             }
 
-            //데이터 메니저 데이터 가져오기
-            CharacterData data = DataManager.Instance.GetCharacterData(character.id);
-
             // 생성된 캐릭터에 데이터 할당 및 상태 초기화 (Idle 상태)
-            CharacterAIController aiController = characterInstance.GetComponent<CharacterAIController>();
+            CharacterAIController aiController = newcharacter.GetComponent<CharacterAIController>();
             if (aiController != null)
             {
-                aiController.characterData = data;
+                aiController.SetCharacterData(character);
             }
-            //Health health = characterInstance.GetComponent<Health>();
-            //if (health != null)
-            //{
-            //    health. = character;
-            //    // Health.Start()에서 maxHealth를 반영하게 됨
-            //}
-            CharacterMachine machine = characterInstance.GetComponent<CharacterMachine>();
+            Health health = newcharacter.GetComponent<Health>();
+            if (health != null)
+            {
+                health.SetCharacterData(character);
+            }
+            CharacterMachine machine = newcharacter.GetComponent<CharacterMachine>();
             if (machine != null)
             {
                 machine.ChangeState(CharacterState.Idle);
             }
+            Debug.Log($"캐릭터 {character.characterName} 생성 완료");
         }
     }
 }

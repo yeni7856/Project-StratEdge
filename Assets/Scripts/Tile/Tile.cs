@@ -7,10 +7,11 @@ namespace MyStartEdge
     public class Tile : MonoBehaviour
     {
         #region Variables
-        /*[SerializeField] private Color hoverColor = Color.green;*/
+        [Header("Mouseover")]
+        [SerializeField] private Material hoverMaterial;
+
         private Renderer tileRenderer;
         private Material originalMaterial;
-        [SerializeField] private Material hoverMaterial;
         #endregion
 
         private void Awake()
@@ -21,7 +22,10 @@ namespace MyStartEdge
 
         public void OnMouseEnter()
         {
-            tileRenderer.material = hoverMaterial;
+            if (IsPlaceable())
+            {
+                tileRenderer.material = hoverMaterial;
+            }
         }
 
         public void OnMouseExit()

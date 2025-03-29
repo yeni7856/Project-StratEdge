@@ -21,11 +21,10 @@ namespace MyStartEdge
         public GameObject bulletPrefab;     //총알 프리팹
 
         private bool isWin = false;            // 적이 전부 죽었는지 확인
-
         private bool isDragging = false;     //드래그여부
         private Transform startParent;
 
-        public CharacterData characterData;     //캐릭터 데이터
+        private CharacterData characterData;     //캐릭터 데이터
         #endregion
 
         private void Start()
@@ -33,11 +32,16 @@ namespace MyStartEdge
             characterMachine = GetComponent<CharacterMachine>();
             animator = GetComponent<Animator>();
             health = GetComponent<Health>();
-
-            //CharacterDatat가 있다면 Health에 maxHealth 설정
         }
+
         private void FixedUpdate()
         {
+            //플레이어 덱에 있을경우 Idle 상태 고정
+            if (transform.parent != null && transform.parent.GetComponent<PlayerSpawnTile>())
+            {
+                characterMachine.ChangeState(CharacterState.Idle);
+            }
+
             LookForEnemy();
 
             if (isWin)
@@ -57,11 +61,14 @@ namespace MyStartEdge
 
         private void OnMouseDrag()
         {
-            if (isDragging) // Check if isDragging is true
-            {
-                Vector3 mousePos = GetMouseWorldPosition();
-                transform.position = new Vector3(mousePos.x, transform.position.y, mousePos.z);
-            }
+            if (!isDragging)
+                return;
+
+            //마우스 월드 좌표 변환
+            Vector3 mousePos = Input.mousePosition;
+            mousePos.z = Camera.main.transform.position.y;
+            Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+            transform.position = new Vector3(mousePos.x, transform.position.y, mousePos.z);
         }
 
         //마우스 타일위에 
@@ -77,7 +84,7 @@ namespace MyStartEdge
                 if (tile != null && tile.IsPlaceable())
                 {
                     transform.SetParent(tile.transform); // 타일의 자식으로 설정
-                    transform.position = new Vector3(tile.transform.position.x, transform.position.y, tile.transform.position.z); // 타일 중심으로 이동
+                    transform.position = tile.transform.position;
                 }
                 else
                 {
@@ -90,14 +97,6 @@ namespace MyStartEdge
             }
         }
 
-        //마우스 월드 좌표 변환
-        private Vector3 GetMouseWorldPosition()
-        {
-            Vector3 mousePos = Input.mousePosition;
-            mousePos.z = Camera.main.transform.position.y;
-            return Camera.main.ScreenToWorldPoint(mousePos);
-        }
-
         // 적 감지 및 공격 또는 이동
         public void LookForEnemy()
         {
@@ -107,15 +106,19 @@ namespace MyStartEdge
             {
                 //가까운 적 찾기
                 GameObject closestEnemy = FindClosestEnemy(enemies);
-                detectedTarget = closestEnemy.transform;    //적위치저장
-                Debug.Log("감지된 적 위치: " + detectedTarget.position);
+                if (closestEnemy != null)
+                {
+                    detectedTarget = closestEnemy.transform;    //적위치저장
+                    Debug.Log("감지된 적 위치: " + detectedTarget.position);
 
-                MoveOrShoot(); // 이동 또는 사격 결정
+                    MoveOrShoot(); // 이동 또는 사격 결정
+                }
             }
             else
             {
                 detectedTarget = null;
                 CheckAllEnemiesDefeated();
+                return;
             }
         }
 
@@ -189,9 +192,8 @@ namespace MyStartEdge
         //슛팅 총알 발사
         public void ShootTarget()
         {
-            if (detectedTarget == null) return;
             characterMachine.ChangeState(CharacterState.Shooting);
-            if(bulletPrefab != null)
+            if(bulletPrefab != null && firePoint != null)
             {
                 GameObject bulletGo= Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
                 Destroy(bulletGo, 2f);
@@ -207,15 +209,9 @@ namespace MyStartEdge
                 return; // 적이 있으면 종료
             }
             isWin = true;       //타일 위에 적 없으면 승리 처리
-            PlayWinAnimation();
+            characterMachine.ChangeState(CharacterState.Win);
         }
         
-        // 승리 애니메이션 실행
-        public void PlayWinAnimation()
-        {
-            animator.SetTrigger("Win");
-        }
-
         //적 감지 범위
         private void OnDrawGizmos()
         {
@@ -234,6 +230,15 @@ namespace MyStartEdge
             {
                 health.Die();
             }
+        }
+
+        //캐릭터 데이터
+        public void SetCharacterData(CharacterData data)
+        {
+            characterData = data;
+            detectRange = data.detectRange;
+            attackRange = data.attackRange;
+            moveSpeed = data.moveSpeed; 
         }
     }
  }

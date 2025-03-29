@@ -7,27 +7,44 @@ namespace MyStartEdge
     {
         #region Variables
         private float currentHealth;                              //현재 체력
-        public bool IsDead => currentHealth <= 0;       //죽음처리
         private CharacterMachine characterMachine;
         private CharacterData characterData;
-        public Image healthFill;
+
+        public Image healthFill;        
+
+        public bool IsDead => currentHealth <= 0;       //죽음처리
         #endregion
 
         void Start ()
         {
             characterMachine = GetComponent<CharacterMachine>();
-            currentHealth = characterData.maxHealth; // 현재 체력을 maxHealth로 초기화
+            if(characterData != null)
+            {
+                currentHealth = characterData.maxHealth; // 현재 체력을 maxHealth로 초기화
+                UpdateHealthBar();
+            }
+            else
+            {
+                Debug.LogWarning("캐릭터 데이터가 들어오지 않았습니다.");
+            }
+        }
+
+        public void SetCharacterData(CharacterData data)
+        {
+            characterData = data;
+            currentHealth = data.maxHealth;
             UpdateHealthBar();
         }
 
         //HealthBar 업데이트
         private void UpdateHealthBar()
         {
-            if (healthFill != null)
+            if (healthFill != null && characterData != null)
             {
                 healthFill.fillAmount = currentHealth / characterData.maxHealth;
             }
         }
+
         public void Die()
         {
             characterMachine.ChangeState(CharacterState.Dead);
@@ -46,15 +63,5 @@ namespace MyStartEdge
                 Die();
             }
         }
-/*        // 최대 체력을 가져오는 함수
-        private float GetMaxHealth()
-        {
-            CharacterAIController controller = GetComponent<CharacterAIController>();
-            if (controller != null && controller.characterData != null)
-            {
-                return controller.characterData.maxHealth;
-            }
-            return 100f; // 기본값, 필요에 따라 변경
-        }*/
     }
 }

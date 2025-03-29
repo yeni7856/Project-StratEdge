@@ -23,30 +23,35 @@ namespace MyStartEdge
             {
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
-                InitializeData();
             }
             else
             {
                 Destroy(gameObject);
             }
         }
-        void InitializeData()
+        
+        //캐릭터 데이터초기화 
+        public void Init(CharacterDatabase database)
         {
             characterData = new Dictionary<int, CharacterData>();
+            allCharacterData = new List<CharacterData>();
 
-            foreach(var data in allCharacterData)
+            foreach(var data in database.characters)
             {
-                if (!characterData.ContainsKey(data.id))
+                if(data != null && !characterData.ContainsKey(data.id))
                 {
                     characterData.Add(data.id, data);
+                    allCharacterData.Add(data);
                 }
                 else
                 {
-                    Debug.LogWarning("중복된 캐릭터 ID 발견" + data.id);
+                    Debug.LogWarning($"중복되거나 비어있는 캐릭터 ID : {data?.id}");
                 }
             }
+            Debug.Log($"데이터메니저 초기화 완료 총 : {allCharacterData.Count} 캐릭터 등록됨");   
         }
-        //캐릭터 데이터 가져오는 메서드
+
+        //Id로 캐릭터 데이터 가져오는 메서드
         public CharacterData GetCharacterData(int id)
         {
             if (characterData.TryGetValue(id, out var data))

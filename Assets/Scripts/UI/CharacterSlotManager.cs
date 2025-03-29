@@ -1,14 +1,12 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
-using UnityEngine.UI;
 
 namespace MyStartEdge
 {
     public class CharacterSlotManager : MonoBehaviour
     {
         #region Variables
+        [Header("UI 슬롯 설정")]
         //public CharacterDatabase characterDB;            //캐릭터 데이터베이스
         public Transform uiSlot;                      //UI 부모 슬롯
         public GameObject characterSlotPrefab;          // UI 슬롯 프리팹
@@ -47,13 +45,18 @@ namespace MyStartEdge
         //랜덤 캐릭터 선택 함수
         private void SelectRandomCharacters()
         {
-            List<CharacterData> pool = new List<CharacterData>(DataManager.Instance.allCharacterData);
+            List<CharacterData> pool = DataManager.Instance.allCharacterData;
 
-            for (int i = 0; i < 4 && pool.Count > 0; i++)
+            for (int i = 0; i < 4; i++)
             {
+                if(pool.Count == 0) break;
                 int randomIndex = Random.Range(0, pool.Count);
-                selectedCharacters.Add(pool[randomIndex]);
-                pool.RemoveAt(randomIndex);
+                CharacterData randomCharacter = pool[randomIndex];
+                if (randomCharacter != null)
+                {
+                    selectedCharacters.Add(randomCharacter);
+                }
+
             }
         }
         
@@ -70,7 +73,7 @@ namespace MyStartEdge
 
                     Destroy(slotObj);
                     CharacterOnMap(character);
-                    });
+                });
             }
         }
 

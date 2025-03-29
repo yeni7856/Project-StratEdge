@@ -16,8 +16,8 @@ namespace MyStartEdge
         public int price;                           //캐릭터 골드 가격 
 
         [Header("AI Settings")]
-        [SerializeField] private float detectRange;    // 적 감지 범위
-        [SerializeField] private float attackRange;     // 근접 공격 범위
-        [SerializeField] private float moveSpeed;     // 이동 속도
+        public float detectRange;    // 적 감지 범위
+        public float attackRange;     // 근접 공격 범위
+        public float moveSpeed;     // 이동 속도
     }
 }
