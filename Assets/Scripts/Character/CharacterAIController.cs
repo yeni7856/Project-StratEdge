@@ -37,9 +37,10 @@ namespace MyStartEdge
         private void FixedUpdate()
         {
             //플레이어 덱에 있을경우 Idle 상태 고정
-            if (transform.parent != null && transform.parent.GetComponent<PlayerSpawnTile>())
+            if (transform.parent != null && transform.parent.GetComponent<PlayerSpawnTile>() != null)
             {
                 characterMachine.ChangeState(CharacterState.Idle);
+                return;
             }
 
             LookForEnemy();
@@ -55,7 +56,6 @@ namespace MyStartEdge
         {
             isDragging = true;
             startParent = transform.parent; // 드래그 시작 전 부모 저장
-            transform.SetParent(null); // 부모에서 분리
             Debug.Log("캐릭터 터치됨");
         }
 

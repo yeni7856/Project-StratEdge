@@ -33,11 +33,12 @@ namespace MyStartEdge
             tileRenderer.material = originalMaterial;
         }
 
-        // 캐릭터 배치 가능 여부 확인
+        // 캐릭터 배치 가능 여부 확인 //캐릭터가 없는 경우만 true 반환
         public bool IsPlaceable()
         {
+            CharacterAIController existingCharacter = GetComponentInChildren<CharacterAIController>();
             // 자신의 자식 오브젝트가 있는지 확인
-            return transform.childCount == 0;
+            return existingCharacter == null;
         }
 
         // 타일 위에 캐릭터가 있는지 확인하는 함수

@@ -105,7 +105,6 @@ namespace MyStartEdge
             animator.SetBool("IsIdle", newState == CharacterState.Idle);
             animator.SetBool("IsWalking", newState == CharacterState.Walking);
             animator.SetBool("IsShooting", newState == CharacterState.Shooting);
-            animator.SetBool("IsAttacking", newState == CharacterState.Attacking);
         }
     }
 }
