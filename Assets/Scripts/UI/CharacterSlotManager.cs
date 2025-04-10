@@ -8,8 +8,9 @@ namespace MyStartEdge
         #region Variables
         [Header("UI ½½·Ô ¼³Á¤")]
         //public CharacterDatabase characterDB;            //Ä³¸¯ÅÍ µ¥ÀÌÅÍº£ÀÌ½º
-        public Transform uiSlot;                      //UI ºÎ¸ð ½½·Ô
+        public Transform uiSlot;                                //UI ºÎ¸ð ½½·Ô
         public GameObject characterSlotPrefab;          // UI ½½·Ô ÇÁ¸®ÆÕ
+        private int slotCount = 5;         //UI ½½·Ô °¹¼ö
 
         private List<CharacterData> selectedCharacters = new List<CharacterData>();
         #endregion
@@ -47,7 +48,7 @@ namespace MyStartEdge
         {
             List<CharacterData> pool = DataManager.Instance.allCharacterData;
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < slotCount; i++)
             {
                 if(pool.Count == 0) break;
                 int randomIndex = Random.Range(0, pool.Count);

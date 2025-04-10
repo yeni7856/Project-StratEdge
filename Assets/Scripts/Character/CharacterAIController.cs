@@ -69,7 +69,7 @@ namespace MyStartEdge
             Vector3 mousePos = Input.mousePosition;
             mousePos.z = Camera.main.transform.position.y;
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
-            transform.position = new Vector3(mousePos.x, transform.position.y, mousePos.z);
+            transform.position = new Vector3(worldPos.x, transform.position.y, worldPos.z);
         }
 
         //마우스 타일위에 

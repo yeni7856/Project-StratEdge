@@ -36,34 +36,7 @@ namespace MyStartEdge
             PlayerSpawnTile[] foundTiles = tileParent.GetComponentsInChildren<PlayerSpawnTile>();
             playerTiles = new List<PlayerSpawnTile>(foundTiles);
         }
-/*
-        void FindSpawnPoints()
-        {
-            spawnPoints.Clear();
-            foreach(Transform child in transform)
-            {
-                spawnPoints.Add(child);
-                child.tag = spawnPoint;
-            }
 
-            Debug.Log($"{spawnPoints.Count} spawn points");
-        }
-
-        //사용 가능한 스폰포인트 랜덤 선택
-        private Transform GetAvailableSpawnPoint()
-        {
-            List<Transform> availablePoints = new List<Transform>();
-
-            foreach(var sp in spawnPoints)
-            {
-                if (sp.childCount == 0)
-                    availablePoints.Add(sp);
-            }
-            if(availablePoints.Count == 0)
-                return null;
-            return availablePoints[Random.Range(0, availablePoints.Count)];
-        }
-*/
         //캐릭터 맵위치에 생성하기
         public void SpawnCharacter(CharacterData character)
         {
@@ -88,16 +61,15 @@ namespace MyStartEdge
             int randomIndex = Random.Range(0, availableTiles.Count);
             PlayerSpawnTile selectedTile = availableTiles[randomIndex];
 
-            CharacterAIController existingCharacter = selectedTile.GetComponentInChildren<CharacterAIController>();
             // 플레이어 타일에 이미 자식(캐릭터)이 있으면 스폰하지 않음
-            if (existingCharacter != null)
+            if (!selectedTile.IsPlaceable())
             {
                 Debug.Log("스폰포인트에 캐릭터가 이미 존재합니다. 캐릭터 덱을 비워주세요.");
                 return;
             }
 
             //캐릭터 생성
-            GameObject newcharacter = Instantiate(character.characterPrefab, selectedTile.transform.position, Quaternion.identity);
+            GameObject newcharacter = Instantiate(character.characterPrefab, selectedTile.transform.position, Quaternion.identity, selectedTile.transform);
             if (newcharacter == null)
             {
                 Debug.Log("캐릭터가 없습니다!");
