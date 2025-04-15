@@ -80,7 +80,7 @@ namespace MyStartEdge
 
         private void CharacterOnMap(CharacterData character)
         {
-            Debug.Log(character.characterName = "º±≈√µ ");
+/*            Debug.Log(character.characterName = "º±≈√µ ");*/
             CharacterSpawner.Instance.SpawnCharacter(character);
         }
     }

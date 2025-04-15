@@ -19,7 +19,7 @@ MonoBehaviour:
   maxHealth: 120
   attack: 8
   bulletSpeed: 1
-  price: 0
+  price: 2
   detectRange: 0.8
   attackRange: 0.1
   moveSpeed: 0.8

@@ -5,7 +5,7 @@ namespace MyStartEdge
 {
     public class PlayerSpawnTile : MonoBehaviour
     {
-        [Header("타일 하이라이트")]
+/*        [Header("타일 하이라이트")]
         [SerializeField] private Material hoverMaterial;
         private Renderer tileRenderer;
         private Material originalMaterial;
@@ -33,7 +33,7 @@ namespace MyStartEdge
             {
                 tileRenderer.material = originalMaterial;
             }
-        }
+        }*/
 
         public bool IsPlaceable()
         {

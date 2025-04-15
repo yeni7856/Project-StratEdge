@@ -22,10 +22,11 @@ namespace MyStartEdge
         public Transform firePoint;              //총알 포지션
         public GameObject bulletPrefab;     //총알 프리팹
 
-        /*private bool isWin = false;            // 적이 전부 죽었는지 확인*/
         private bool isDragging = false;     //드래그여부
         private Transform startParent;          //프리팹 부모
         private bool isBattleStarted = false;  //전투 시작 여부
+
+        private Tile currentHoveredTile;
 
         #endregion
 
@@ -70,25 +71,149 @@ namespace MyStartEdge
             mousePos.z = Camera.main.transform.position.y;
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
             transform.position = new Vector3(worldPos.x, transform.position.y, worldPos.z);
+
+            // Raycast로 타일 감지
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit[] hits = Physics.RaycastAll(ray, 100f);
+
+            Tile foundTile = null;
+            foreach (var hit in hits)
+            {
+                Tile tile = hit.collider.GetComponent<Tile>();
+                if (tile != null)
+                {
+                    foundTile = tile;
+                    break;
+                }
+            }
+
+            // 이전 타일 하이라이트 해제
+            if (currentHoveredTile != null && currentHoveredTile != foundTile)
+                currentHoveredTile.Highlight(false);
+
+            // 새 타일 하이라이트
+            if (foundTile != null)
+            {
+                bool isSwapTarget = false;
+                CharacterAIController other = foundTile.GetComponentInChildren<CharacterAIController>();
+
+                // 다른 캐릭터가 타일 위에 있는 경우만 flash 처리
+                if (other != null && other != this && foundTile.transform != startParent)
+                {
+                    isSwapTarget = true;
+                }
+
+                foundTile.Highlight(true, isSwapTarget);
+                currentHoveredTile = foundTile;
+            }
         }
 
         //마우스 타일위에 
         private void OnMouseUp()
         {
             isDragging = false;
+
+            // 하이라이트 해제
+            if (currentHoveredTile != null)
+            {
+                currentHoveredTile.Highlight(false);
+                currentHoveredTile = null;
+            }
+
             // 타일에 배치 시도
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 100f))
+            RaycastHit[] hits = Physics.RaycastAll(ray,100f);
+            foreach(var hit in hits)
             {
-                Tile tile = hit.collider.GetComponent<Tile>();
-                if (tile != null && tile.IsPlaceable())
+                Transform tileTransform = null;
+                CharacterAIController targetCharacter = null;
+
+                // 타일 타입 감지
+                if (hit.collider.TryGetComponent(out Tile tile))
                 {
-                    transform.SetParent(tile.transform); // 타일의 자식으로 설정
-                    transform.position = tile.transform.position;
+                    tileTransform = tile.transform;
+                    targetCharacter = tile.GetComponentInChildren<CharacterAIController>();
+                }
+                else if (hit.collider.TryGetComponent(out PlayerSpawnTile deckTile))
+                {
+                    tileTransform = deckTile.transform;
+                    targetCharacter = deckTile.GetComponentInChildren<CharacterAIController>();
+                }
+
+                if (tileTransform == null) continue;
+
+                // 스왑
+                if (targetCharacter != null && targetCharacter != this && tileTransform != startParent)
+                {
+                    Transform myTile = transform.parent;
+                    Transform targetTile = targetCharacter.transform.parent;
+
+                    transform.SetParent(targetTile);
+                    transform.position = targetTile.position;
+
+                    targetCharacter.transform.SetParent(myTile);
+                    targetCharacter.transform.position = myTile.position;
+
+                    if (myTile.TryGetComponent(out Tile myTileScript))
+                        StartCoroutine(myTileScript.Flash());
+                    if (targetTile.TryGetComponent(out Tile targetTileScript))
+                        StartCoroutine(targetTileScript.Flash());
+
                     return;
                 }
+
+                // 빈 자리 or 자기 자리로 배치
+                bool isPlaceable = (targetCharacter == null) || (tileTransform == startParent);
+
+                if (isPlaceable)
+                {
+                    transform.SetParent(tileTransform);
+                    transform.position = tileTransform.position;
+
+                    if (tileTransform.TryGetComponent(out Tile t))
+                        StartCoroutine(t.Flash());
+
+                    return;
+                }
+                //Tile tile = hit.collider.GetComponent<Tile>();
+                //if (tile == null) continue;
+
+                ////해당 타일 위에 다른캐릭터가 있으면 서로 자리 바꿈
+                //CharacterAIController target = tile.GetComponentInChildren<CharacterAIController>();
+                //if(target != null && target != this)
+                //{
+                //    //현재 캐릭터, 타겟 캐릭터 타일 기억
+                //    Transform myTile = this.transform.parent;
+                //    Transform targetTile = target.transform.parent;
+
+                //    //위치 바꾸기
+                //    this.transform.SetParent(targetTile);
+                //    this.transform.position = targetTile.position;
+
+                //    target.transform.SetParent(myTile);
+                //    target.transform.position = myTile.position;
+
+                //    //깜빡임
+                //    if (myTile.TryGetComponent(out Tile myTileScript))
+                //        StartCoroutine(myTileScript.Flash());
+
+                //    if (targetTile.TryGetComponent(out Tile targetTileScript))
+                //        StartCoroutine(targetTileScript.Flash());
+
+                //    return;
+                //}
+
+                ////타일에 아무도 없으면 배치
+                //if (tile.IsPlaceable())
+                //{
+                //    transform.SetParent(tile.transform); // 타일의 자식으로 설정
+                //    transform.position = tile.transform.position;
+
+                //    StartCoroutine(tile.Flash());
+                //    return;
+                //}
             }
+
             //배치 실패시 원래 자리로 복귀
             if(startParent != null)
             {
@@ -167,16 +292,6 @@ namespace MyStartEdge
             }
         }
 
-/*        // 적이 있는지 확인
-        public void CheckAllEnemiesDefeated()
-        {
-            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-            if (enemies.Length > 0)
-            {
-                return; // 적이 있으면 종료
-            }
-        }
-        */
         //적 감지 범위
         private void OnDrawGizmos()
         {

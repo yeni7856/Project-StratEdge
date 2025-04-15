@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoverMaterial: {fileID: 2100000, guid: 155ea6e1a32e7ab4c8ce71ed095e35d6, type: 2}
+  flashMaterial: {fileID: 2100000, guid: d22175f8ff1d75e43a1ef55b6af7b663, type: 2}
 --- !u!65 &8776177303464818803
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -116,7 +117,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,8 +8,9 @@ namespace MyStartEdge
     public class Tile : MonoBehaviour
     {
         #region Variables
-        [Header("Mouseover")]
+        [Header("타일 하이라이트")]
         [SerializeField] private Material hoverMaterial;
+        [SerializeField] private Material flashMaterial;
 
         private Renderer tileRenderer;
         private Material originalMaterial;
@@ -17,19 +19,46 @@ namespace MyStartEdge
         private void Awake()
         {
             tileRenderer = GetComponent<Renderer>();
-            originalMaterial = tileRenderer.material;
-        }
 
-        public void OnMouseEnter()
-        {
-            if (IsPlaceable())
+            if (tileRenderer != null)
             {
-                tileRenderer.material = hoverMaterial;
+                originalMaterial = GetComponent<Material>();
             }
         }
 
-        public void OnMouseExit()
+        private void OnMouseEnter()
         {
+            if (IsPlaceable())
+            {
+                Highlight(true);
+            }
+        }
+
+        private void OnMouseExit()
+        {
+            Highlight(false);
+        }
+
+        //드래그/오버 시 타일 하이라이트
+        public void Highlight(bool on, bool isSwapTarget = false)
+        {
+            if (tileRenderer == null || hoverMaterial == null || originalMaterial == null)
+                return;
+            if (!on)
+            {
+                tileRenderer.material = originalMaterial;
+                return;
+            }
+            tileRenderer.material = isSwapTarget ? flashMaterial : hoverMaterial;
+        }
+
+        //캐릭터 배치 성공/ 스왑 타일 변경
+        public IEnumerator Flash()
+        {
+            if (tileRenderer == null || flashMaterial == null || originalMaterial == null) yield break;
+
+            tileRenderer.material = flashMaterial;
+            yield return new WaitForSeconds(0.3f);
             tileRenderer.material = originalMaterial;
         }
 
@@ -39,45 +68,6 @@ namespace MyStartEdge
             CharacterAIController existingCharacter = GetComponentInChildren<CharacterAIController>();
             // 자신의 자식 오브젝트가 있는지 확인
             return existingCharacter == null;
-        }
-
-        // 타일 위에 캐릭터가 있는지 확인하는 함수
-        public bool HasCharactersOnTile()
-        {
-            // 타일의 중심에서 위쪽으로 Raycast를 쏘아서 캐릭터가 있는지 확인
-            Ray ray = new Ray(transform.position + Vector3.up * 0.5f, Vector3.down); // 타일 약간 위에서 아래로
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, 1f)) // Raycast 거리 1f
-            {
-                // Ray에 맞은 오브젝트가 CharacterAIController를 가지고 있는지 확인
-                if (hit.collider.GetComponent<CharacterAIController>() != null)
-                {
-                    return true; // 캐릭터가 있음
-                }
-            }
-            return false; // 캐릭터가 없음
-        }
-
-        // 타일 위에 있는 캐릭터들에게 명령을
-        public void OrderAttack()
-        {
-            if (HasCharactersOnTile())
-            {
-                // 타일의 중심에서 위쪽으로 Raycast를 쏘아서 캐릭터를 찾음
-                Ray ray = new Ray(transform.position + Vector3.up * 0.5f, Vector3.down);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit, 1f))
-                {
-                    CharacterAIController character = hit.collider.GetComponent<CharacterAIController>();
-                    if (character != null)
-                    {
-                        // 캐릭터에게 공격 명령을 내리는 로직 (예: character.Attack();)
-                        // CharacterAIController에 Attack() 함수를 추가해야 합니다.
-                    }
-                }
-            }
         }
     }
 }

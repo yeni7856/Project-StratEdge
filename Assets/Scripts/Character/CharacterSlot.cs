@@ -22,6 +22,7 @@ namespace MyStartEdge
             characterData = character;
             characterImage.sprite = character.characterImage; // 캐릭터 이미지 설정
             characterName.text = character.characterName; // 캐릭터 이름 설정
+            characterGold.text = character.price.ToString();   //캐릭터 골드 가격 설정
 
             selectButton.onClick.RemoveAllListeners(); // 기존 이벤트 삭제
             selectButton.onClick.AddListener(() => onSelect.Invoke()); // 새로운 이벤트 등록
